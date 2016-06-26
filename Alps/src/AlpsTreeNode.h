@@ -34,10 +34,8 @@
 #include "AlpsKnowledge.h"
 #include "AlpsNodeDesc.h"
 
-typedef int AlpsNodeIndex_t;
-
-class AlpsKnowledgeBroker;
 class AlpsSubTree;
+class AlpsKnowledgeBroker;
 
 //#############################################################################
 /** This class holds one node of the search tree. Note that the generic search
@@ -112,6 +110,7 @@ class AlpsTreeNode : public AlpsKnowledge {
  public:
     AlpsTreeNode()
         :
+      AlpsKnowledge(AlpsKnowledgeTypeNode),
         active_(false),
         index_(-1),
         depth_(-1),
@@ -131,7 +130,7 @@ class AlpsTreeNode : public AlpsKnowledge {
         knowledgeBroker_(0),
         sentMark_(0),
         diving_(false)
-        { setType(AlpsKnowledgeTypeNode); }
+        { }
 
     virtual ~AlpsTreeNode() {
         assert(numChildren_ == 0);
@@ -157,10 +156,14 @@ class AlpsTreeNode : public AlpsKnowledge {
     void setDesc(AlpsNodeDesc* desc) { desc_ = desc; }
 
     /** Functions to access/set the knwoledge broker */
-    inline AlpsKnowledgeBroker*  getKnowledgeBroker() const
-        { return knowledgeBroker_; }
-    inline void setKnowledgeBroker(AlpsKnowledgeBroker* kb)
-        { knowledgeBroker_ = kb; }
+    // inline AlpsKnowledgeBroker*  getKnowledgeBroker() const
+    //     { return knowledgeBroker_; }
+    // inline void setKnowledgeBroker(AlpsKnowledgeBroker* kb) {
+    //   knowledgeBroker_ = kb;
+    //   // if (desc_->getModel()==NULL) {
+    //   //   desc_->setModel(kb->getModel());
+    //   // }
+    // }
 
     /** The purpose of this function is be able to create the children of
         a node after branching. */
@@ -365,9 +368,6 @@ class AlpsTreeNode : public AlpsKnowledge {
   virtual AlpsReturnStatus encode(AlpsEncoded * encoded) const;
   /// Unpack Alps portion of node into this from an encoded object.
   virtual AlpsReturnStatus decodeToSelf(AlpsEncoded & encoded);
-  /// Unpack Alps portion of node into a new AlpsTreeNode object and return a
-  /// pointer to it.
-  virtual AlpsKnowledge * decode(AlpsEncoded & encoded) const;
 
 };
 #endif
